@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Students Portal Dashboard</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <style>
+        /* Reset and basic styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            background-color: #f0f0f0;
+            margin-left: 250px; /* Adjust margin as per your design */
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 65px;
+            display: flex;
+            overflow-x: hidden;
+            flex-direction: column;
+            background: #161a2d;
+            padding: 25px 20px;
+            transition: width 0.4s ease; /* Transition width change */
+        }
+
+        .sidebar .logo-container {
+            text-align: center;
+            padding: 15px 10px;
+            display: flex;
+        }
+
+        .sidebar:hover {
+            width: 230px; /* Expanded width on hover */
+        }
+
+        .sidebar .sidebar-header img {
+            margin-top: auto;
+            padding: 28px 10px;
+            margin-left: -30px;
+        }
+
+        .sidebar .sidebar-header {
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar .sidebar-header .logo-container img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+        }
+
+        .sidebar .sidebar-header h1 {
+            color: #fff;
+            font-size: 1.25rem;
+            font-weight: 600;
+            white-space: nowrap;
+            margin-left: 23px;
+        }
+
+        .sidebar:hover .sidebar-header .logo-container {
+            display: none;
+        }
+
+        .sidebar-links h3 {
+            color: #fff;
+            font-weight: 100;
+            white-space: nowrap;
+            margin: 10px 0;
+            position: relative;
+        }
+
+        .sidebar-links h3 span {
+            opacity: 0;
+        }
+
+        .sidebar:hover .sidebar-links h3 span {
+            opacity: 1;
+        }
+
+        .sidebar-links .menu-separator {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 100%;
+            height: 1px;
+            transform: scaleX(1);
+            transform: translateY(-50%);
+            background: #4f52ba;
+            transform-origin: right;
+            transition-delay: 0.2s;
+        }
+
+        .sidebar:hover .sidebar-links .menu-separator {
+            transition-delay: 0s;
+            transform: scaleX(0);
+        }
+
+        .sidebar-links {
+            list-style: none;
+            margin-top: 20px;
+            height: calc(100% - 100px); /* Adjust based on your sidebar height */
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+
+        .sidebar-links::-webkit-scrollbar {
+            display: none;
+        }
+
+        .sidebar-links li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar-links li a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #fff;
+            font-weight: 500;
+            white-space: nowrap;
+            padding: 15px 10px;
+            text-decoration: none;
+            transition: 0.2s ease;
+        }
+
+        .sidebar-links li a:hover {
+            color: #727792;
+            background: #fff;
+            border-radius: 4px;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #050505;
+            min-width: 130px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            margin-top: -10px; /* Adjust based on design */
+            max-height: 200px; /* Limit dropdown height */
+            overflow-y: auto; /* Add scrollbar if needed */
+        }
+
+        .dropdown-content a {
+            color: white;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #595a5a;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .content {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .tab-link {
+            background: #4f52ba;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 1rem;
+        }
+
+        .tab-link:hover,
+        .tab-link.active {
+            background: #161a2d;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .filter-section {
+            margin-bottom: 10px;
+        }
+
+        .filter-section label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .filter-section input[type="text"],
+        .filter-section input[type="checkbox"],
+        .filter-section input[type="radio"] {
+            margin-bottom: 5px; /* Adjust spacing as needed */
+            padding: 8px; /* Adjust padding as needed */
+            width: 60%; /* Adjust width as needed */
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .button-container {
+            margin-top: 20px;
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 10px 20px;
+            text-decoration: none;
+            background-color: #e74c3c;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-right: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .back-button:hover {
+            background-color: #c0392b;
+        }
+
+        button[type="submit"] {
+            padding: 10px 20px;
+            background-color: #2ecc71;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #27ae60;
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-container">
+                <img src="logoiat.jpg" alt="logo" />
+            </div>
+            <h1>IMS</h1>
+        </div>
+        <ul class="sidebar-links">
+            <h3><span>Main Menu</span></h3>
+            <li>
+                <div class="dropdown">
+                    <a href="home%20page.html">
+                        <span class="material-icons">home</span>Home
+                    </a>
+                </div>
+            </li>
+            <li>
+                <div class="dropdown">
+                    <a href="file:///C:/Users/DBIT/Desktop/web%20application%20files%2C/New%20Enrolment.html">
+                        <span class="material-icons">add</span>New Enrolment
+                    </a>
+                </div>
+            </li>
+            <li>
+                <div class="dropdown">
+                    <a href="filter .html">
+                        <span class="material-icons">filter</span>Filters
+                    </a>
+                </div>
+            </li>
+            <li>
+                <div class="dropdown">
+                    <a href="Update%20Student%20Details%20page.html">
+                        <span class="material-icons">edit</span>Update Details
+                    </a>
+                </div>
+            </li>
+            <li>
+                <a href="#">
+                    <span class="material-icons">delete</span>Delete Details
+                </a>
+            </li>
+            <li>
+                <div class="dropdown">
+                    <a href="#">
+                        <span class="material-icons">more_horiz</span>More
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="#">Class</a>
+                        <a href="#">Dashboard</a>
+                        <a href="#">Tasks</a>
+                        <a href="#">Capstone</a>
+                        <a href="#">Queries</a>
+                        <a href="#">Requirements</a>
+                        <a href="#">Portfolio – Submission</a>
+                        <a href="#">Applications</a>
+                        <a href="#">Interview Tasks</a>
+                        <a href="#">Mock interviews</a>
+                        <a href="#">Leave – applications</a>
+                        <a href="#">Certificate</a>
+                        <a href="#">Testimonial</a>
+                        <a href="#">Leaderboard</a>
+                        <a href="#">Placement</a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </aside>
+
+    <div class="content">
+        <section id="new-enrolment">
+            <h1>Filter</h1>
+            
+            <div class="tabs">
+                <button class="tab-link active" onclick="openTab(event, 'General')">General</button>
+                <button class="tab-link" onclick="openTab(event, 'Courses')">Courses</button>
+                <button class="tab-link" onclick="openTab(event, 'Status')">Student Status</button>
+                <button class="tab-link" onclick="openTab(event, 'Completion')">Project Completion</button>
+                <button class="tab-link" onclick="openTab(event, 'Tasks')">Task Completion</button>
+                <button class="tab-link" onclick="openTab(event, 'Certified')">Certified Candidates</button>
+                <button class="tab-link" onclick="openTab(event, 'Placement')">Placement Prep</button>
+                <button class="tab-link" onclick="openTab(event, 'Placed')">Placed Students</button>
+                <button class="tab-link" onclick="openTab(event, 'Interviews')">Interviews</button>
+            </div>
+            
+            <div id="General" class="tab-content active">
+                <div class="filter-section">
+                    <label for="batch-code">Batch Code:</label>
+                    <input type="text" id="batch-code" name="batch-code">
+                </div>
+            </div>
+
+            <div id="Courses" class="tab-content">
+                <div class="filter-section">
+                    <label>Courses:</label>
+                    <div class="options">
+                        <input type="checkbox" id="course1" name="course1">
+                        <label for="course1">Course 1</label>
+                        <input type="checkbox" id="course2" name="course2">
+                        <label for="course2">Course 2</label>
+                        <input type="checkbox" id="course3" name="course3">
+                        <label for="course3">Course 3</label>
+                    </div>
+                </div>
+            </div>
+
+            <div id="Status" class="tab-content">
+                <div class="filter-section">
+                    <label>Student Status:</label>
+                    <div class="options">
+                        <input type="radio" id="status-enrolled" name="status" value="enrolled">
+                        <label for="status-enrolled">Enrolled</label>
+                        <input type="radio" id="status-enquiry" name="status" value="enquiry">
+                        <label for="status-enquiry">Enquiry</label>
+                        <input type="radio" id="status-waiting" name="status" value="waiting">
+                        <label for="status-waiting">Waiting List</label>
+                        <input type="radio" id="status-demo" name="status" value="demo">
+                        <label for="status-demo">Attend Demo</label>
+                    </div>
+                </div>
+            </div>
+
+            <div id="Completion" class="tab-content">
+                <div class="filter-section">
+                    <label>Project Completion:</label>
+                    <div class="options">
+                        <input type="radio" id="completion-completed" name="completion" value="completed">
+                        <label for="completion-completed">Completed</label>
+                        <input type="radio" id="completion-not-completed" name="completion" value="not-completed">
+                        <label for="completion-not-completed">Not Completed</label>
+                    </div>
+                </div>
+            </div>
+
+            <div id="Tasks" class="tab-content">
+                <div class="filter-section">
+                    <label>Task Completion:</label>
+                    <div class="options">
+                        <input type="radio" id="task-completed" name="task" value="completed">
+                        <label for="task-completed">Completed</label>
+                        <input type="radio" id="task-pending" name="task" value="pending">
+                        <label for="task-pending">Pending</label>
+                    </div>
+                </div>
+            </div>
+
+            <div id="Certified" class="tab-content">
+                <div class="filter-section">
+                    <label>Certified Candidates:</label>
+                    <input type="checkbox" id="certified" name="certified">
+                    <label for="certified">Certified</label>
+                </div>
+            </div>
+
+            <div id="Placement" class="tab-content">
+                <div class="filter-section">
+                    <label>Placement Prep:</label>
+                    <input type="checkbox" id="placement-prep" name="placement-prep">
+                    <label for="placement-prep">Preparation Done</label>
+                </div>
+            </div>
+
+            <div id="Placed" class="tab-content">
+                <div class="filter-section">
+                    <label>Placed Students:</label>
+                    <input type="checkbox" id="placed" name="placed">
+                    <label for="placed">Placed</label>
+                </div>
+            </div>
+
+            <div id="Interviews" class="tab-content">
+                <div class="filter-section">
+                    <label>Interviews:</label>
+                    <input type="checkbox" id="interviews" name="interviews">
+                    <label for="interviews">Scheduled</label>
+                </div>
+            </div>
+
+            <div class="button-container">
+                <button class="back-button">Back</button>
+                <button type="submit">Apply Filters</button>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        function openTab(evt, tabName) {
+            // Get all elements with class="tab-content" and hide them
+            var tabContents = document.getElementsByClassName("tab-content");
+            for (var i = 0; i < tabContents.length; i++) {
+                tabContents[i].style.display = "none";
+            }
+
+            // Get all elements with class="tab-link" and remove the class "active"
+            var tabLinks = document.getElementsByClassName("tab-link");
+            for (var i = 0; i < tabLinks.length; i++) {
+                tabLinks[i].classList.remove("active");
+            }
+
+            // Show the current tab, and add an "active" class to the button that opened the tab
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.classList.add("active");
+        }
+    </script>
+</body>
+</html>
